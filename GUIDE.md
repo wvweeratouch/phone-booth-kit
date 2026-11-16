@@ -64,8 +64,19 @@ Coordinates: `x` goes 0..1 from left to right as people see themselves (the came
 | F | fullscreen. Move the window to the projector screen first, press F, then map |
 | D | show what the camera sees, with the values |
 | Shift+R | forget the mapping |
+| + media / × media | in map mode, under each surface's name tag: put an image or video on that surface, or take it off |
+| drop a file | drag an image or video file onto a surface to put it there |
 
-The mapping is remembered in this browser.
+The mapping and any media added by hand are remembered in this browser.
+
+## Media from code
+
+```js
+mapMedia('wall', 'clip.mp4');   // image or video file next to index.html, or a URL
+mapMedia('wall', null);         // take it off
+```
+
+Media covers the surface's own drawing. Video plays muted and loops. A file the person dropped in by hand wins over media set in code.
 
 ## Workflow
 
