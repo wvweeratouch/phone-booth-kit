@@ -64,6 +64,9 @@ Coordinates: `x` goes 0..1 from left to right as people see themselves (the came
 | F | fullscreen. Move the window to the projector screen first, press F, then map |
 | D | show what the camera sees, with the values |
 | Shift+R | forget the mapping |
+| Keystone / Grid Warp | in map mode, under each surface's name tag. Keystone = 4 corners. Grid Warp = a grid of points for curved or folded surfaces |
+| Add Row / Add Column | more points on the grid. To start the grid over, press Keystone and then Grid Warp |
+| + box / × box | + box (top bar in map mode) adds a new surface; × box removes one you added |
 | + media / × media | in map mode, under each surface's name tag: put an image or video on that surface, or take it off |
 | drop a file | drag an image or video file onto a surface to put it there |
 
@@ -77,6 +80,10 @@ mapMedia('wall', null);         // take it off
 ```
 
 Media covers the surface's own drawing. Video plays muted and loops. A file the person dropped in by hand wins over media set in code.
+
+Grid Warp redraws the surface through WebGL, so it works when the surface shows a `<canvas>`, an image or a video. Anything else (SVG, plain HTML) can use Keystone only. When the page is opened by double-click, media set with `mapMedia()` from a file path cannot be grid-warped; dropping the same file in by hand can.
+
+`integrator.html` is an empty page for composing many surfaces: it opens in map mode, then + box and + media.
 
 ## Workflow
 
