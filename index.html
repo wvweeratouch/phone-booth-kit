@@ -6,7 +6,7 @@
 <!--
   SENSE (เครื่องรับรู้อะไร):  motion · where · swipe   (level 1 เพิ่ม gesture · level 2 เพิ่ม count, speed)
   DO    (แล้วทำอะไร):        ผนัง: เส้นแสงโค้งนูนตรงจุดที่มีคนขยับ ยิ่งขยับแรงยิ่งสว่าง
-                             กล่อง: ปัดมือแล้วมีแถบแสงวิ่งผ่านตามทิศที่ปัด
+                             กล่อง: ลายวงกลมไหลออกจากกลาง ยิ่งขยับยิ่งเร็ว · ปัดมือแล้วมีแถบแสงวิ่งผ่านตามทิศที่ปัด
   FOR   (เพื่ออะไร):         ______  ← เติมเอง
 -->
 <style>
@@ -62,9 +62,28 @@
     }
   }
 
+  // ---- กล่อง: ลายวงกลมซ้อนกัน ไหลออกจากกลาง · ยิ่งมีคนขยับ ยิ่งไหลเร็วและสว่าง ----
+  let flow = 0;
+  function drawRings() {
+    const gap = 24;
+    flow += 0.3 + sense.motion * 4;
+    const cx = BS / 2 + (sense.where.x - 0.5) * 60;   // จุดกลางเอนตามตำแหน่งที่คนขยับ
+    const cy = BS / 2 + (sense.where.y - 0.5) * 60;
+    const a = 0.5 + sense.motion * 0.5;
+    box.save();
+    box.beginPath(); box.rect(6, 6, BS - 12, BS - 12); box.clip();   // ไม่ให้ลายเกินขอบกล่อง
+    box.lineWidth = gap * 0.45;
+    for (let r = flow % gap, i = Math.floor(flow / gap); r < BS; r += gap, i--) {
+      box.strokeStyle = i % 2 ? 'rgba(200,255,58,' + a + ')' : 'rgba(240,235,220,' + a * 0.8 + ')';
+      box.beginPath(); box.arc(cx, cy, r, 0, 7); box.stroke();
+    }
+    box.restore();
+  }
+
   function drawBox() {
-    box.fillStyle = 'rgba(0,0,0,0.2)';
+    box.fillStyle = '#000';
     box.fillRect(0, 0, BS, BS);
+    drawRings();
     box.strokeStyle = 'rgba(255,255,255,0.6)';
     box.lineWidth = 2;
     box.strokeRect(6, 6, BS - 12, BS - 12);           // ขอบกล่อง ใช้ตอน map ให้ตรงมุม
@@ -72,7 +91,7 @@
     if (sweep) {
       sweep.t += 0.04;
       const p = sweep.t * BS;
-      box.fillStyle = '#c8ff3a';
+      box.fillStyle = '#fff';                          // ขาว ให้เห็นชัดบนลายวงกลม
       if (sweep.dir === 'right') box.fillRect(p - 30, 0, 30, BS);
       if (sweep.dir === 'left') box.fillRect(BS - p, 0, 30, BS);
       if (sweep.dir === 'down') box.fillRect(0, p - 30, BS, 30);
